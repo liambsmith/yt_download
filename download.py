@@ -261,6 +261,10 @@ def download_video(
         'writethumbnail': True,
         'writeautomaticsub': True,
         'skip_download': audio_only,
+        'ignoreerrors': True,
+        'subtitles': ['en', 'hu', ''],
+        'writesubtitles': True,
+        'subtitleslangs': ['en', 'hu'],
     }
     
     # Add audio extraction options if needed
