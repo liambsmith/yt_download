@@ -253,6 +253,9 @@ def download_video(
     ydl_opts = {
         'outtmpl': os.path.join(output_dir, '%(title)s - %(id)s.%(ext)s'),
         'format': format_select,
+        'format_sort': 'br',
+        'format_sort_force': True,
+        'verbose': True,
         'progress_hooks': [print_progress],
         'merge_output_format': 'mp4' if not audio_only else 'mp3',
         'postprocessors': post_processors,
