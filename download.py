@@ -235,15 +235,15 @@ def download_video(
         format_select = 'bestaudio/best'
         post_processors = []
     else:
-        format_select = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
+        # Prioritize AVC codec (higher bitrate) over AV1/VP9
+        format_select = 'bv*[vcodec^=avc]+ba/bv*[vcodec^=avc]+ba/b'
         # Add FFmpeg post-processor if available
         post_processors = [{
             'key': 'FFmpegVideoConvertor',
             'preferedformat': 'mp4',
         }]
     
-    # Format sort: bitrate (highest first), then resolution, then codec quality
-    format_sort = 'br,res,-vcodec:av01,-vcodec:vp9.2,-vcodec:vp9,-vcodec:avc'
+    
     
     # Build audio format options
     if audio_formats:
@@ -256,8 +256,7 @@ def download_video(
     ydl_opts = {
         'outtmpl': os.path.join(output_dir, '%(title)s - %(id)s.%(ext)s'),
         'format': format_select,
-        'format_sort': format_sort,
-        'format_sort_force': True,
+        'format_sort': 'br',
         'verbose': True,
         'progress_hooks': [print_progress],
         'merge_output_format': 'mp4' if not audio_only else 'mp3',
