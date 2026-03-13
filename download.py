@@ -242,6 +242,9 @@ def download_video(
             'preferedformat': 'mp4',
         }]
     
+    # Format sort: bitrate (highest first), then resolution, then codec quality
+    format_sort = 'br,res,-vcodec:av01,-vcodec:vp9.2,-vcodec:vp9,-vcodec:avc'
+    
     # Build audio format options
     if audio_formats:
         # Convert list to comma-separated string
@@ -253,7 +256,7 @@ def download_video(
     ydl_opts = {
         'outtmpl': os.path.join(output_dir, '%(title)s - %(id)s.%(ext)s'),
         'format': format_select,
-        'format_sort': 'br',
+        'format_sort': format_sort,
         'format_sort_force': True,
         'verbose': True,
         'progress_hooks': [print_progress],
