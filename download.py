@@ -235,8 +235,8 @@ def download_video(
         format_select = 'bestaudio/best'
         post_processors = []
     else:
-        # Prioritize AVC codec (higher bitrate) over AV1/VP9
-        format_select = 'bv*[vcodec^=avc]+ba/bv*[vcodec^=avc]+ba/b'
+        # Select best video with audio, 1080p or higher, any codec
+        format_select = 'bv*[height>=?1080]+ba/b'
         # Add FFmpeg post-processor if available
         post_processors = [{
             'key': 'FFmpegVideoConvertor',
@@ -256,7 +256,9 @@ def download_video(
     ydl_opts = {
         'outtmpl': os.path.join(output_dir, '%(title)s - %(id)s.%(ext)s'),
         'format': format_select,
-        'format_sort': 'br',
+        'format_sort': 'br,res',
+        'format_sort_force': True,
+        'extractor_args': {'youtube': {'player_client': 'tv,ios'}},
         'verbose': True,
         'progress_hooks': [print_progress],
         'merge_output_format': 'mp4' if not audio_only else 'mp3',
